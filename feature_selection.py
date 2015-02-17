@@ -224,3 +224,64 @@ def plus_L_minus_R(features, max_k, criterion_func, L=3, R=2, print_steps=False)
             if count >= 30:
                 break
         return feat_sub
+
+
+def seq_float_forw_select(features, max_k, criterion_func, print_steps=False):
+    """
+    Implementation of Sequential Floating Forward Selection.
+    
+    Keyword Arguments:
+        features (list): The feature space as a list of features.
+        max_k: Termination criterion; the size of the returned feature subset.
+        criterion_func (function): Function that is used to evaluate the
+            performance of the feature subset.
+        print_steps (bool): Prints the algorithm procedure if True.
+    
+    Returns the selected feature subset, a list of features of length max_k.
+
+    """
+
+    # Initialization
+    feat_sub = []
+    k = 0
+
+    while True:
+
+        # Step 1: Inclusion
+        if print_steps:
+            print('\nInclusion from features', features)
+        if len(features) > 0:
+            crit_func_max = criterion_func(feat_sub + [features[0]])
+            best_feat = features[0]
+            if len(features) > 1:
+                for x in features[1:]:
+                    crit_func_eval = criterion_func(feat_sub + [x])
+                    if crit_func_eval > crit_func_max:
+                        crit_func_max = crit_func_eval
+                        best_feat = x
+            features.remove(best_feat)
+            feat_sub.append(best_feat)
+            if print_steps:
+                print('include: {} -> feature_subset: {}'.format(best_feat, feat_sub))
+
+        # Step 2: Conditional Exclusion
+            worst_feat_val = None
+            if len(features) + len(feat_sub) > max_k:
+                crit_func_max = criterion_func(feat_sub)
+                for i in reversed(range(0,len(feat_sub))):
+                    crit_func_eval = criterion_func(feat_sub[:i] + feat_sub[i+1:])
+                    if crit_func_eval > crit_func_max:
+                        worst_feat, crit_func_max = i, crit_func_eval
+                        worst_feat_val = feat_sub[worst_feat]
+                if worst_feat_val:
+                    del feat_sub[worst_feat]
+            if print_steps:
+                print('exclude: {} -> feature subset: {}'.format(worst_feat_val, feat_sub))
+
+
+        # Termination condition
+        k = len(feat_sub)
+        if k == max_k:
+            break
+
+    return feat_sub
