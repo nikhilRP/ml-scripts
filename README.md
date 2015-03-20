@@ -1,10 +1,11 @@
-Utility-scripts
+ml-scripts
 ===============
 
-1. Development environment setup utility scripts
-2. Feature selection methods
+Most of the scripts are written for personal understanding of the concepts.
+
+1. Feature selection methods
   * Sequential Forward Selection (SFS)
   * Sequential Backward Selection (SBS)
   * Plus L minus R selection
-3. BWT and FM-Index implementation for my understanding
-  
+2. BWT and FM-Index implementation for my understanding
+3. Perceptron
