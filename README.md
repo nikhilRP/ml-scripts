@@ -1,11 +1,4 @@
-ml-scripts
-===============
+ML/AI models and other utilities
+================================
 
-Most of the scripts are written for personal understanding of the concepts.
-
-1. Feature selection methods
-  * Sequential Forward Selection (SFS)
-  * Sequential Backward Selection (SBS)
-  * Plus L minus R selection
-2. BWT and FM-Index implementation
-3. Perceptron
+All the models and/or scripts in this repository are written for personal understanding purposes. Please do not use them for development or production purposes.
