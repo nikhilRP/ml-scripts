@@ -4,14 +4,14 @@ from copy import deepcopy
 def seq_forw_select(features, max_k, criterion_func, print_steps=False):
     """
     Implementation of a Sequential Forward Selection algorithm.
-    
+
     Keyword Arguments:
         features (list): The feature space as a list of features.
         max_k: Termination criterion; the size of the returned feature subset.
         criterion_func (function): Function that is used to evaluate the
             performance of the feature subset.
         print_steps (bool): Prints the algorithm procedure if True.
-    
+
     Returns the selected feature subset, a list of features of length max_k.
 
     """
@@ -37,7 +37,8 @@ def seq_forw_select(features, max_k, criterion_func, print_steps=False):
                 best_feat = x
         feat_sub.append(best_feat)
         if print_steps:
-            print('include: {} -> feature subset: {}'.format(best_feat, feat_sub))
+            print('include: {} -> feature subset: {}'.format(
+                best_feat, feat_sub))
         features.remove(best_feat)
 
         # Termination condition
@@ -51,14 +52,14 @@ def seq_forw_select(features, max_k, criterion_func, print_steps=False):
 def seq_backw_select(features, max_k, criterion_func, print_steps=False):
     """
     Implementation of a Sequential Backward Selection algorithm.
-    
+
     Keyword Arguments:
         features (list): The feature space as a list of features.
         max_k: Termination criterion; the size of the returned feature subset.
         criterion_func (function): Function that is used to evaluate the
             performance of the feature subset.
         print_steps (bool): Prints the algorithm procedure if True.
-        
+
     Returns the selected feature subset, a list of features of length max_k.
 
     """
@@ -76,14 +77,15 @@ def seq_backw_select(features, max_k, criterion_func, print_steps=False):
         worst_feat_val = feat_sub[worst_feat]
         crit_func_max = criterion_func(feat_sub[:-1])
 
-        for i in reversed(range(0,len(feat_sub)-1)):
+        for i in reversed(range(0, len(feat_sub)-1)):
             crit_func_eval = criterion_func(feat_sub[:i] + feat_sub[i+1:])
             if crit_func_eval > crit_func_max:
                 worst_feat, crit_func_max = i, crit_func_eval
                 worst_feat_val = feat_sub[worst_feat]
         del feat_sub[worst_feat]
         if print_steps:
-            print('exclude: {} -> feature subset: {}'.format(worst_feat_val, feat_sub))
+            print('exclude: {} -> feature subset: {}'.format(
+                worst_feat_val, feat_sub))
 
         # Termination condition
         k = len(feat_sub)
@@ -93,10 +95,12 @@ def seq_backw_select(features, max_k, criterion_func, print_steps=False):
     return feat_sub
 
 
-def plus_L_minus_R(features, max_k, criterion_func, L=3, R=2, print_steps=False):
+def plus_L_minus_R(
+    features, max_k, criterion_func, L=3, R=2, print_steps=False
+):
     """
     Implementation of a "Plus l take away r" algorithm.
-    
+
     Keyword Arguments:
         features (list): The feature space as a list of features.
         max_k: Termination criterion; the size of the returned feature subset.
@@ -105,14 +109,14 @@ def plus_L_minus_R(features, max_k, criterion_func, L=3, R=2, print_steps=False)
         L (int): Number of features added per iteration.
         R (int): Number of features removed per iteration.
         print_steps (bool): Prints the algorithm procedure if True.
-    
+
     Returns the selected feature subset, a list of features of length max_k.
 
     """
     assert(L != R), 'L must be != R to avoid an infinite loop'
 
     ############################
-    ### +L -R for case L > R ###
+    # +L -R for case L > R ###
     ############################
 
     if L > R:
@@ -138,7 +142,9 @@ def plus_L_minus_R(features, max_k, criterion_func, L=3, R=2, print_steps=False)
                     features.remove(best_feat)
                     feat_sub.append(best_feat)
                     if print_steps:
-                        print('include: {} -> feature_subset: {}'.format(best_feat, feat_sub))
+                        print(
+                            'include: {} -> feature_subset: {}'.format(
+                                best_feat, feat_sub))
 
             # -R (Exclusion)
             if print_steps:
@@ -149,15 +155,16 @@ def plus_L_minus_R(features, max_k, criterion_func, L=3, R=2, print_steps=False)
                     worst_feat_val = feat_sub[worst_feat]
                     crit_func_max = criterion_func(feat_sub[:-1])
 
-                    for j in reversed(range(0,len(feat_sub)-1)):
-                        crit_func_eval = criterion_func(feat_sub[:j] + feat_sub[j+1:])
+                    for j in reversed(range(0, len(feat_sub)-1)):
+                        crit_func_eval = criterion_func(
+                            feat_sub[:j] + feat_sub[j + 1:])
                         if crit_func_eval > crit_func_max:
                             worst_feat, crit_func_max = j, crit_func_eval
                             worst_feat_val = feat_sub[worst_feat]
                     del feat_sub[worst_feat]
                     if print_steps:
-                        print('exclude: {} -> feature subset: {}'.format(worst_feat_val, feat_sub))
-
+                        print('exclude: {} -> feature subset: {}'.format(
+                            worst_feat_val, feat_sub))
 
             # Termination condition
             k = len(feat_sub)
@@ -167,7 +174,7 @@ def plus_L_minus_R(features, max_k, criterion_func, L=3, R=2, print_steps=False)
         return feat_sub
 
     ############################
-    ### +L -R for case L < R ###
+    # +L -R for case L < R ###
     ############################
 
     else:
@@ -188,21 +195,24 @@ def plus_L_minus_R(features, max_k, criterion_func, L=3, R=2, print_steps=False)
                     worst_feat_val = feat_sub[worst_feat]
                     crit_func_max = criterion_func(feat_sub[:-1])
 
-                    for i in reversed(range(0,len(feat_sub)-1)):
-                        crit_func_eval = criterion_func(feat_sub[:i] + feat_sub[i+1:])
+                    for i in reversed(range(0, len(feat_sub)-1)):
+                        crit_func_eval = criterion_func(
+                            feat_sub[:i] + feat_sub[i+1:])
                         if crit_func_eval > crit_func_max:
                             worst_feat, crit_func_max = i, crit_func_eval
                             worst_feat_val = feat_sub[worst_feat]
                     removed_feats.append(feat_sub.pop(worst_feat))
             if print_steps:
-                print('exclude: {} -> feature subset: {}'.format(removed_feats, feat_sub))
+                print('exclude: {} -> feature subset: {}'.format(
+                    removed_feats, feat_sub))
 
             # +L (Inclusion)
             included_feats = []
             if len(feat_sub) != max_k:
                 for i in range(L):
                     if len(removed_feats) > 0:
-                        crit_func_max = criterion_func(feat_sub + [removed_feats[0]])
+                        crit_func_max = criterion_func(
+                            feat_sub + [removed_feats[0]])
                         best_feat = removed_feats[0]
                         if len(removed_feats) > 1:
                             for x in removed_feats[1:]:
@@ -215,7 +225,8 @@ def plus_L_minus_R(features, max_k, criterion_func, L=3, R=2, print_steps=False)
                         included_feats.append(best_feat)
                 if print_steps:
                     print('\nInclusion from removed features', removed_feats)
-                    print('include: {} -> feature_subset: {}'.format(included_feats, feat_sub))
+                    print('include: {} -> feature_subset: {}'.format(
+                        included_feats, feat_sub))
 
             # Termination condition
             k = len(feat_sub)
@@ -229,14 +240,14 @@ def plus_L_minus_R(features, max_k, criterion_func, L=3, R=2, print_steps=False)
 def seq_float_forw_select(features, max_k, criterion_func, print_steps=False):
     """
     Implementation of Sequential Floating Forward Selection.
-    
+
     Keyword Arguments:
         features (list): The feature space as a list of features.
         max_k: Termination criterion; the size of the returned feature subset.
         criterion_func (function): Function that is used to evaluate the
             performance of the feature subset.
         print_steps (bool): Prints the algorithm procedure if True.
-    
+
     Returns the selected feature subset, a list of features of length max_k.
 
     """
@@ -262,22 +273,24 @@ def seq_float_forw_select(features, max_k, criterion_func, print_steps=False):
             features.remove(best_feat)
             feat_sub.append(best_feat)
             if print_steps:
-                print('include: {} -> feature_subset: {}'.format(best_feat, feat_sub))
+                print('include: {} -> feature_subset: {}'.format(
+                    best_feat, feat_sub))
 
         # Step 2: Conditional Exclusion
             worst_feat_val = None
             if len(features) + len(feat_sub) > max_k:
                 crit_func_max = criterion_func(feat_sub)
-                for i in reversed(range(0,len(feat_sub))):
-                    crit_func_eval = criterion_func(feat_sub[:i] + feat_sub[i+1:])
+                for i in reversed(range(0, len(feat_sub))):
+                    crit_func_eval = criterion_func(
+                        feat_sub[:i] + feat_sub[i+1:])
                     if crit_func_eval > crit_func_max:
                         worst_feat, crit_func_max = i, crit_func_eval
                         worst_feat_val = feat_sub[worst_feat]
                 if worst_feat_val:
                     del feat_sub[worst_feat]
             if print_steps:
-                print('exclude: {} -> feature subset: {}'.format(worst_feat_val, feat_sub))
-
+                print('exclude: {} -> feature subset: {}'.format(
+                    worst_feat_val, feat_sub))
 
         # Termination condition
         k = len(feat_sub)
@@ -290,14 +303,14 @@ def seq_float_forw_select(features, max_k, criterion_func, print_steps=False):
 def seq_float_backw_select(features, max_k, criterion_func, print_steps=False):
     """
     Implementation of Sequential Floating Backward Selection.
-    
+
     Keyword Arguments:
         features (list): The feature space as a list of features.
         max_k: Termination criterion; the size of the returned feature subset.
         criterion_func (function): Function that is used to evaluate the
             performance of the feature subset.
         print_steps (bool): Prints the algorithm procedure if True.
-    
+
     Returns the selected feature subset, a list of features of length max_k.
 
     """
@@ -322,7 +335,7 @@ def seq_float_backw_select(features, max_k, criterion_func, print_steps=False):
         worst_feat_val = feat_sub[worst_feat]
         crit_func_max = criterion_func(feat_sub[:-1])
 
-        for i in reversed(range(0,len(feat_sub)-1)):
+        for i in reversed(range(0, len(feat_sub)-1)):
             crit_func_eval = criterion_func(feat_sub[:i] + feat_sub[i+1:])
             if crit_func_eval > crit_func_max:
                 worst_feat, crit_func_max = i, crit_func_eval
@@ -330,7 +343,8 @@ def seq_float_backw_select(features, max_k, criterion_func, print_steps=False):
         excluded_features.append(feat_sub[worst_feat])
         del feat_sub[worst_feat]
         if print_steps:
-            print('exclude: {} -> feature subset: {}'.format(worst_feat_val, feat_sub))
+            print('exclude: {} -> feature subset: {}'.format(
+                worst_feat_val, feat_sub))
 
         # Step 2: Conditional Inclusion
         if len(excluded_features) > 0 and len(feat_sub) != max_k:
@@ -338,7 +352,8 @@ def seq_float_backw_select(features, max_k, criterion_func, print_steps=False):
             best_feat_val = None
             crit_func_max = criterion_func(feat_sub)
             for i in range(len(excluded_features)):
-                crit_func_eval = criterion_func(feat_sub + [excluded_features[i]])
+                crit_func_eval = criterion_func(
+                    feat_sub + [excluded_features[i]])
                 if crit_func_eval > crit_func_max:
                     best_feat, crit_func_max = i, crit_func_eval
                     best_feat_val = excluded_features[best_feat]
@@ -346,7 +361,6 @@ def seq_float_backw_select(features, max_k, criterion_func, print_steps=False):
                 feat_sub.append(excluded_features[best_feat])
                 del excluded_features[best_feat]
             if print_steps:
-                    print('include: {} -> feature subset: {}'.\
+                    print('include: {} -> feature subset: {}'.
                           format(best_feat_val, feat_sub))
-
     return feat_sub

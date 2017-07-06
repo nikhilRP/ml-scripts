@@ -1,2 +1,6 @@
 
 *.pyc
+
+env/*
+
+.cache/v/cache/lastfailed

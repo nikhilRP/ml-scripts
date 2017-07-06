@@ -19,8 +19,8 @@ class FMIndex(object):
         return c
 
     def _count(self, idx, qc):
-        """ count the occurances of letter qc (rank of qc) upto position idx """
-        if not qc in self.occ.keys():
+        """count the occurances of letter qc (rank of qc) upto position idx """
+        if qc not in self.occ.keys():
             return 0
         c = 0
         for i in xrange(idx):
@@ -144,6 +144,7 @@ def main():
     args = parser.parse_args()
     print "Input - " + args.read_seq
     fm_index = FMIndex(args.read_seq)
+    print(fm_index)
 
 
 if __name__ == '__main__':

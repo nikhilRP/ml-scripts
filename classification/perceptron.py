@@ -51,11 +51,11 @@ class Perceptron(object):
 
         """
 
-        #check array shape
+        # check array shape
         if not len(X.shape) == 2:
             raise ValueError('X must be a 2D array. Try X[:, np.newaxis]')
 
-        #check if {0, 1} or  {-1, 1} class labels are used
+        # check if {0, 1} or  {-1, 1} class labels are used
         self.classes_ = np.unique(y)
         if not len(self.classes_) == 2 \
                 or not self.classes_[0] in (-1, 0) \
@@ -63,7 +63,7 @@ class Perceptron(object):
                     raise ValueError('Only supports binary class labels \
                             {0, 1} 0r {-1, 1}.')
 
-        #initialize weights
+        # initialize weights
         if not isinstance(init_weights, np.ndarray):
             self.w_ = np.random.random(1 + X.shape[1])
         else:
@@ -71,7 +71,7 @@ class Perceptron(object):
 
         self.cost_ = []
 
-        #learn weights
+        # learn weights
         for _ in range(self.epochs):
             errors = 0
             for xi, target in zip(X, y):
@@ -103,4 +103,5 @@ class Perceptron(object):
             Predicted class label.
 
         """
-        return np.where(self.net_input(X) >= 0.0, self.classes_[1], self.classes_[0])
+        return np.where(
+            self.net_input(X) >= 0.0, self.classes_[1], self.classes_[0])
